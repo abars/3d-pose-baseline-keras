@@ -18,7 +18,7 @@ Prediction using Keras
 
 `python plot.py`
 
-<img src="https://github.com/abars/3dpose-baseline-keras/blob/master/pretrain/plot.png" width="50%" height="50%">
+<img src="https://github.com/abars/3dpose-baseline-keras/blob/master/plot.png" width="50%" height="50%">
 
 # About 3d-pose-baseline
 

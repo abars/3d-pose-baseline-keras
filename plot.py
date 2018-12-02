@@ -6,6 +6,7 @@ import h5py
 
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import numpy as np
 
 with h5py.File('../3d-pose-baseline-master/dataset.h5', 'r') as f:
@@ -43,9 +44,13 @@ H36M_NAMES[27] = 'RWrist'
 
 fig = plt.figure()
 ax = Axes3D(fig)
-ax.set_xlabel('X axis')
-ax.set_ylabel('Z axis')
-ax.set_zlabel('Y axis')
+
+IS_3D=False
+cnt=0
+
+X=[]
+Y=[]
+Z=[]
 
 def search_name(name):
 	j=0
@@ -74,74 +79,85 @@ def draw_connect(from_id,to_id,color="#00aa00"):
 
 	ax.plot(x, z, y, "o-", color=color, ms=4, mew=0.5)
 
-for mode in range(2):
-	X=[]
-	Y=[]
-	Z=[]
+def plot(data):
+	plt.cla()
 
-	IS_NORMALIZE=True
-	if(mode==0):
-		IS_3D=True
-	else:
-		IS_3D=False
+	ax.set_xlabel('X axis')
+	ax.set_ylabel('Z axis')
+	ax.set_zlabel('Y axis')
+	ax.set_zlim([600, -600])
 
-	k=0
-	for i in range(16):
-		for j in range(32):
-			if(search_name(H36M_NAMES[j])==i):
-				break
+	global cnt,X,Y,Z,IS_3D
+	k=cnt
 
-		if IS_NORMALIZE:
-			if IS_3D:
-				X.append(outputs[k,i*3+0]*data_std_3d[j*3+0]+data_mean_3d[j*3+0])
-				Y.append(outputs[k,i*3+1]*data_std_3d[j*3+1]+data_mean_3d[j*3+1])
-				Z.append(outputs[k,i*3+2]*data_std_3d[j*3+2]+data_mean_3d[j*3+2])
-			else:
-				print data_std_2d[j*2+0]
-				print data_std_2d[j*2+1]
-				X.append(inputs[k,i*2+0]*data_std_2d[j*2+0]+data_mean_2d[j*2+0])
-				Y.append(inputs[k,i*2+1]*data_std_2d[j*2+1]+data_mean_2d[j*2+1])
-				Z.append(0)
+	for mode in range(2):
+		X=[]
+		Y=[]
+		Z=[]
+
+		IS_NORMALIZE=True
+		if(mode==0):
+			IS_3D=True
 		else:
-			if IS_3D:
-				X.append(outputs[k,i*3+0])
-				Y.append(outputs[k,i*3+1])
-				Z.append(outputs[k,i*3+2])
+			IS_3D=False
+
+		for i in range(16):
+			for j in range(32):
+				if(search_name(H36M_NAMES[j])==i):
+					break
+
+			if IS_NORMALIZE:
+				if IS_3D:
+					X.append(outputs[k,i*3+0]*data_std_3d[j*3+0]+data_mean_3d[j*3+0])
+					Y.append(outputs[k,i*3+1]*data_std_3d[j*3+1]+data_mean_3d[j*3+1])
+					Z.append(outputs[k,i*3+2]*data_std_3d[j*3+2]+data_mean_3d[j*3+2])
+				else:
+					X.append(inputs[k,i*2+0]*data_std_2d[j*2+0]+data_mean_2d[j*2+0])
+					Y.append(inputs[k,i*2+1]*data_std_2d[j*2+1]+data_mean_2d[j*2+1])
+					Z.append(0)
 			else:
-				X.append(inputs[k,i*2+0])
-				Y.append(inputs[k,i*2+1])
-				Z.append(0)
+				if IS_3D:
+					X.append(outputs[k,i*3+0])
+					Y.append(outputs[k,i*3+1])
+					Z.append(outputs[k,i*3+2])
+				else:
+					X.append(inputs[k,i*2+0])
+					Y.append(inputs[k,i*2+1])
+					Z.append(0)
 
-	if(IS_3D):
-		draw_connect("Head","Thorax","#0000aa")
-		draw_connect("Thorax",'RShoulder')
-		draw_connect('RShoulder','RElbow')
-		draw_connect('RElbow','RWrist')
-		draw_connect("Thorax",'LShoulder')
-		draw_connect('LShoulder','LElbow')
-		draw_connect('LElbow','LWrist')
-		draw_connect('Thorax','Spine')
-		draw_connect('Spine','LHip')
-		draw_connect('Spine','RHip')
-		draw_connect('RHip','RKnee')
-		draw_connect('RKnee','RFoot')
-		draw_connect('LHip','LKnee')
-		draw_connect('LKnee','LFoot')
-	else:
-		draw_connect("Head","Thorax","#0000ff")
-		draw_connect("Thorax",'RShoulder',"#00ff00")
-		draw_connect('RShoulder','RElbow',"#00ff00")
-		draw_connect('RElbow','RWrist',"#00ff00")
-		draw_connect("Thorax",'LShoulder',"#00ff00")
-		draw_connect('LShoulder','LElbow',"#00ff00")
-		draw_connect('LElbow','LWrist',"#00ff00")
-		draw_connect('Thorax','Spine',"#00ff00")
-		draw_connect('Spine','Hip',"#00ff00")
-		draw_connect('Hip','LHip',"#00ff00")
-		draw_connect('Hip','RHip',"#00ff00")
-		draw_connect('RHip','RKnee',"#00ff00")
-		draw_connect('RKnee','RFoot',"#00ff00")
-		draw_connect('LHip','LKnee',"#00ff00")
-		draw_connect('LKnee','LFoot',"#00ff00")
+		if(IS_3D):
+			draw_connect("Head","Thorax","#0000aa")
+			draw_connect("Thorax",'RShoulder')
+			draw_connect('RShoulder','RElbow')
+			draw_connect('RElbow','RWrist')
+			draw_connect("Thorax",'LShoulder')
+			draw_connect('LShoulder','LElbow')
+			draw_connect('LElbow','LWrist')
+			draw_connect('Thorax','Spine')
+			draw_connect('Spine','LHip')
+			draw_connect('Spine','RHip')
+			draw_connect('RHip','RKnee')
+			draw_connect('RKnee','RFoot')
+			draw_connect('LHip','LKnee')
+			draw_connect('LKnee','LFoot')
+		else:
+			draw_connect("Head","Thorax","#0000ff")
+			draw_connect("Thorax",'RShoulder',"#00ff00")
+			draw_connect('RShoulder','RElbow',"#00ff00")
+			draw_connect('RElbow','RWrist',"#00ff00")
+			draw_connect("Thorax",'LShoulder',"#00ff00")
+			draw_connect('LShoulder','LElbow',"#00ff00")
+			draw_connect('LElbow','LWrist',"#00ff00")
+			draw_connect('Thorax','Spine',"#00ff00")
+			draw_connect('Spine','Hip',"#00ff00")
+			draw_connect('Hip','LHip',"#00ff00")
+			draw_connect('Hip','RHip',"#00ff00")
+			draw_connect('RHip','RKnee',"#00ff00")
+			draw_connect('RKnee','RFoot',"#00ff00")
+			draw_connect('LHip','LKnee',"#00ff00")
+			draw_connect('LKnee','LFoot',"#00ff00")
 
+	cnt=cnt+1
+
+ani = animation.FuncAnimation(fig, plot, interval=10)
 plt.show()

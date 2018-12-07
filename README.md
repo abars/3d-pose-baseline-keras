@@ -12,7 +12,7 @@ https://github.com/ArashHosseini/3d-pose-baseline
 
 Training using Keras
 
-`Under implementing`
+`pyrhon train.py` (implementing)
 
 Prediction using Keras
 

@@ -1,5 +1,8 @@
 #insert this code to train function of predict_3dpose.py
+#  export_dataset(train_set_2d,data_mean_2d,data_std_2d,train_set_3d,data_mean_3d,data_std_3d,"train.h5")
+#  export_dataset(test_set_2d,data_mean_2d,data_std_2d,test_set_3d,data_mean_3d,data_std_3d,"test.h5")
 
+def export_dataset(train_set_2d,data_mean_2d,data_std_2d,train_set_3d,data_mean_3d,data_std_3d,hdf5_name):
   # Figure out how many frames we have
   data_x=train_set_2d
   data_y=train_set_3d
@@ -27,7 +30,7 @@
     idx = idx + n2d
 
   # Write DataSet
-
+  print("Export data to "+hdf5_name)
   print(encoder_inputs)
   print(decoder_outputs)
   print(encoder_inputs.shape)
@@ -37,12 +40,10 @@
   print(data_mean_3d.shape)
   print(data_std_3d.shape)
 
-  with h5py.File('dataset.h5', 'w') as f:
+  with h5py.File(hdf5_name, 'w') as f:
     f.create_dataset('encoder_inputs', data=encoder_inputs)
     f.create_dataset('decoder_outputs', data=decoder_outputs)
     f.create_dataset('data_mean_2d', data=data_mean_2d)
     f.create_dataset('data_std_2d', data=data_std_2d)
     f.create_dataset('data_mean_3d', data=data_mean_3d)
     f.create_dataset('data_std_3d', data=data_std_3d)
-  
-  sys.exit(1)

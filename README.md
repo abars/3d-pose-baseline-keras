@@ -6,7 +6,7 @@ Keras implementation of 3d-pose-baseline.
 
 # Architecture
 
-Dump training data from 3d-pose-baseline
+Dump training data from 3d-pose-baseline using export_dataset.py
 
 https://github.com/ArashHosseini/3d-pose-baseline
 

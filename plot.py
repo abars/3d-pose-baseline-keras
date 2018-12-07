@@ -1,4 +1,6 @@
-#Display dataset
+# ----------------------------------------------
+#Display 3dpose baseline dataset
+# ----------------------------------------------
 
 import os
 import numpy as np
@@ -9,7 +11,9 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 
-with h5py.File('../3d-pose-baseline-master/dataset.h5', 'r') as f:
+DATASET_PATH='../3d-pose-baseline-master'
+
+with h5py.File(DATASET_PATH+'/train.h5', 'r') as f:
   inputs = np.array(f['encoder_inputs'])
   outputs = np.array(f['decoder_outputs'])
   data_mean_2d = np.array(f['data_mean_2d'])
@@ -17,11 +21,11 @@ with h5py.File('../3d-pose-baseline-master/dataset.h5', 'r') as f:
   data_mean_3d = np.array(f['data_mean_3d'])
   data_std_3d = np.array(f['data_std_3d'])
 
-print inputs.shape
-print outputs.shape
+print(inputs.shape)
+print(outputs.shape)
 
-print data_mean_2d.shape
-print data_std_2d.shape
+print(data_mean_2d.shape)
+print(data_std_2d.shape)
 
 H36M_NAMES = ['']*32
 H36M_NAMES[0]  = 'Hip'

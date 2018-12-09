@@ -70,11 +70,11 @@ for i in range(confidence.shape[1]):
 	minVal, prob, minLoc, point = cv2.minMaxLoc(probMap)
 
 	x = (input_img.shape[1] * point[0]) / confidence.shape[3]
-	y = (input_img.shape[0] * point[1]) / confidence.shape[2]
+	y = (input_img.shape[0] * point[1]) / confidence.shape[2] 
  
 	if prob > threshold : 
-		points.append(int(x))
-		points.append(int(y))
+		points.append(x)
+		points.append(y)
 	else :
 		points.append(0)
 		points.append(0)
@@ -94,7 +94,7 @@ with h5py.File(DATASET_PATH+'/train.h5', 'r') as f:
   data_std_3d = np.array(f['data_std_3d'])
 
 H36M_NAMES = ['']*32
-H36M_NAMES[0]  = 'Hip'
+H36M_NAMES[0]  = 'Hip' #ignore when 3d
 H36M_NAMES[1]  = 'RHip'
 H36M_NAMES[2]  = 'RKnee'
 H36M_NAMES[3]  = 'RFoot'
@@ -111,6 +111,10 @@ H36M_NAMES[19] = 'LWrist'
 H36M_NAMES[25] = 'RShoulder'
 H36M_NAMES[26] = 'RElbow'
 H36M_NAMES[27] = 'RWrist'
+
+#mean list
+h36m_2d_mean = [0,1,2,3,6,7,8,12,13,15,17,18,19,25,26,27]
+h36m_3d_mean = [1,2,3,6,7,8,12,13,14,15,17,18,19,25,26,27]
 
 OPENPOSE_Nose = 0
 OPENPOSE_Neck = 1
@@ -147,21 +151,10 @@ inputs[0*2+1] = (points[11*2+1]+points[8*2+1])/2
 inputs[7*2+0] = (points[5*2+0]+points[2*2+0])/2
 inputs[7*2+1] = (points[5*2+1]+points[2*2+1])/2
 
-#inputs_reshape = np.reshape(inputs,(1,32))
-
-#print data_mean_2d
-
-#print inputs_reshape
-
-#inputs_mean = np.mean(inputs_reshape, axis=0)
-#inputs_std  =  np.std(inputs_reshape, axis=0)
-
-#print inputs
-
-#inputs=(inputs-inputs_mean)/inputs_std
-
-#print inputs
-#print inputs_std
+for i in range(16):
+	j=h36m_2d_mean[i]
+	inputs[i*2+0]=(inputs[i*2+0]-data_mean_2d[j*2+0])/data_std_2d[j*2+0]
+	inputs[i*2+1]=(inputs[i*2+1]-data_mean_2d[j*2+1])/data_std_2d[j*2+1]
 
 # ----------------------------------------------
 # Predict
@@ -169,7 +162,7 @@ inputs[7*2+1] = (points[5*2+1]+points[2*2+1])/2
 
 
 # ----------------------------------------------
-# Predict result
+# Display result
 # ----------------------------------------------
 
 fig = plt.figure()
@@ -231,17 +224,15 @@ def plot(data):
 			IS_3D=False
 
 		for i in range(16):
-			for j in range(32):
-				if(search_name(H36M_NAMES[j])==i):
-					break
-
 			if IS_3D:
+				j=h36m_3d_mean[i]
 				X.append(outputs[k,i*3+0]*data_std_3d[j*3+0]+data_mean_3d[j*3+0])
 				Y.append(outputs[k,i*3+1]*data_std_3d[j*3+1]+data_mean_3d[j*3+1])
 				Z.append(outputs[k,i*3+2]*data_std_3d[j*3+2]+data_mean_3d[j*3+2])
 			else:
-				X.append(inputs[i*2+0])#*inputs_std[i*2+0]+inputs_mean[i*2+0])
-				Y.append(inputs[i*2+1])#*inputs_std[i*2+1]+inputs_mean[i*2+1])
+				j=h36m_2d_mean[i]
+				X.append(inputs[i*2+0]*data_std_2d[j*2+0]+data_mean_2d[j*2+0])
+				Y.append(inputs[i*2+1]*data_std_2d[j*2+1]+data_mean_2d[j*2+1])
 				Z.append(0)
 
 		if(IS_3D):

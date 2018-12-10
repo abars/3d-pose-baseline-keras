@@ -5,27 +5,30 @@
 import cv2
 import sys
 import numpy as np
+import pandas as pd
 import os
 import caffe
-import matplotlib.pyplot as plt
-import pandas as pd
-
-import os
-import numpy as np
 import h5py
-
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-import numpy as np
+
+from mpl_toolkits.mplot3d import Axes3D
+from keras.models import load_model
+
+# ----------------------------------------------
+# Setting
+# ----------------------------------------------
+
+MODEL_HDF5 = "3d-pose-baseline.hdf5"
+IMAGE_PATH = "images/running.jpg"
+CAFFE_MODEL = 'pose_iter_440000.caffemodel'
+PROTOTXT = 'pose_deploy.prototxt'
+DATASET_PATH = '../3d-pose-baseline-master'
 
 # ----------------------------------------------
 # Input Data
 # ----------------------------------------------
 
-IMAGE_PATH="images/running.jpg"
-CAFFE_MODEL='pose_iter_440000.caffemodel'
-PROTOTXT='pose_deploy.prototxt'
 IMAGE_WIDTH=368
 IMAGE_HEIGHT=368
 
@@ -82,8 +85,6 @@ for i in range(confidence.shape[1]):
 # ----------------------------------------------
 # Convert format
 # ----------------------------------------------
-
-DATASET_PATH='../3d-pose-baseline-master'
 
 with h5py.File(DATASET_PATH+'/train.h5', 'r') as f:
   inputs = np.array(f['encoder_inputs'])
@@ -160,6 +161,16 @@ for i in range(16):
 # Predict
 # ----------------------------------------------
 
+keras_model = load_model(MODEL_HDF5)
+keras_model.summary()
+reshape_input = np.reshape(np.array(inputs),(1,32))
+#print reshape_input
+#print reshape_input.shape
+pred = keras_model.predict(reshape_input,batch_size=1)[0]
+#print pred
+
+outputs=outputs[0]
+outputs=pred
 
 # ----------------------------------------------
 # Display result
@@ -226,9 +237,9 @@ def plot(data):
 		for i in range(16):
 			if IS_3D:
 				j=h36m_3d_mean[i]
-				X.append(outputs[k,i*3+0]*data_std_3d[j*3+0]+data_mean_3d[j*3+0])
-				Y.append(outputs[k,i*3+1]*data_std_3d[j*3+1]+data_mean_3d[j*3+1])
-				Z.append(outputs[k,i*3+2]*data_std_3d[j*3+2]+data_mean_3d[j*3+2])
+				X.append(outputs[i*3+0]*data_std_3d[j*3+0]+data_mean_3d[j*3+0])
+				Y.append(outputs[i*3+1]*data_std_3d[j*3+1]+data_mean_3d[j*3+1])
+				Z.append(outputs[i*3+2]*data_std_3d[j*3+2]+data_mean_3d[j*3+2])
 			else:
 				j=h36m_2d_mean[i]
 				X.append(inputs[i*2+0]*data_std_2d[j*2+0]+data_mean_2d[j*2+0])

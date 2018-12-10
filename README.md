@@ -34,8 +34,6 @@ https://github.com/ArashHosseini/3d-pose-baseline
 
 <img src="https://github.com/abars/3d-pose-baseline-keras/blob/master/images/plot.png" width="50%" height="50%">
 
-from WiderFaceDataset
-
 ## Train
 
 Training using Keras
@@ -65,6 +63,13 @@ Mean value has 32 keypoint, So you should remove unused dimension. Mean value is
 ## Original work
 
 https://github.com/ArashHosseini/3d-pose-baseline
+
+@inproceedings{martinez_2017_3dbaseline,
+  title={A simple yet effective baseline for 3d human pose estimation},
+  author={Martinez, Julieta and Hossain, Rayat and Romero, Javier and Little, James J.},
+  booktitle={ICCV},
+  year={2017}
+}
 
 # OpenPose to 3dpose
 

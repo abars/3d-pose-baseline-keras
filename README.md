@@ -1,8 +1,10 @@
 ## 3d-pose-baseline-keras
 
-Underconstructing
-
 Keras implementation of 3d-pose-baseline.
+
+<img src="https://github.com/abars/3d-pose-baseline-keras/blob/master/images/running.jpg" width="50%" height="50%">
+<img src="https://github.com/abars/3d-pose-baseline-keras/blob/master/images/running.png" width="50%" height="50%">
+from WiderFaceDataset
 
 # Demo
 
@@ -28,13 +30,19 @@ https://github.com/ArashHosseini/3d-pose-baseline
 
 `python plot.py`
 
-<img src="https://github.com/abars/3d-pose-baseline-keras/blob/master/plot.png" width="50%" height="50%">
+<img src="https://github.com/abars/3d-pose-baseline-keras/blob/master/images/plot.png" width="50%" height="50%">
+
+from WiderFaceDataset
 
 ## Train
 
 Training using Keras
 
-`pyrhon train.py` (implementing)
+`python train.py` (implementing)
+
+This is a pretrained output
+
+http://www.abars.biz/keras/3d-pose-baseline.hdf5
 
 # About 3d-pose-baseline
 

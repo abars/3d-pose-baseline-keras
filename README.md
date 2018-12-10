@@ -46,6 +46,8 @@ This is a pretrained output
 
 http://www.abars.biz/keras/3d-pose-baseline.hdf5
 
+http://www.abars.biz/keras/3d-pose-baseline-mean.h5
+
 # About 3d-pose-baseline
 
 ## Architecture

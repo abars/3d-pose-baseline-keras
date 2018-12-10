@@ -23,7 +23,6 @@ MODEL_HDF5 = "3d-pose-baseline.hdf5"
 IMAGE_PATH = "images/running.jpg"
 CAFFE_MODEL = 'pose_iter_440000.caffemodel'
 PROTOTXT = 'pose_deploy.prototxt'
-DATASET_PATH = '../3d-pose-baseline-master'
 
 # ----------------------------------------------
 # Input Data
@@ -86,9 +85,7 @@ for i in range(confidence.shape[1]):
 # Convert format
 # ----------------------------------------------
 
-with h5py.File(DATASET_PATH+'/train.h5', 'r') as f:
-  inputs = np.array(f['encoder_inputs'])
-  outputs = np.array(f['decoder_outputs'])
+with h5py.File('3d-pose-baseline-mean.h5', 'r') as f:
   data_mean_2d = np.array(f['data_mean_2d'])
   data_std_2d = np.array(f['data_std_2d'])
   data_mean_3d = np.array(f['data_mean_3d'])
@@ -164,13 +161,7 @@ for i in range(16):
 keras_model = load_model(MODEL_HDF5)
 keras_model.summary()
 reshape_input = np.reshape(np.array(inputs),(1,32))
-#print reshape_input
-#print reshape_input.shape
-pred = keras_model.predict(reshape_input,batch_size=1)[0]
-#print pred
-
-outputs=outputs[0]
-outputs=pred
+outputs = keras_model.predict(reshape_input,batch_size=1)[0]
 
 # ----------------------------------------------
 # Display result

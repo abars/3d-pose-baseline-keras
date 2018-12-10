@@ -71,8 +71,8 @@ https://github.com/ArashHosseini/3d-pose-baseline
 >   year={2017}
 > }
 
-# OpenPose to 3dpose
-
 ## Related work
+
+OpenPose to 3dpose
 
 https://github.com/miu200521358/3d-pose-baseline-vmd/blob/master/src/openpose_3dpose_sandbox_vmd.py

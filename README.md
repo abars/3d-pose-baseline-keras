@@ -3,7 +3,7 @@
 Keras implementation of 3d-pose-baseline.
 
 <img src="https://github.com/abars/3d-pose-baseline-keras/blob/master/images/running.jpg" width="50%" height="50%">
-<img src="https://github.com/abars/3d-pose-baseline-keras/blob/master/images/running.png" width="50%" height="50%">
+
 from WiderFaceDataset
 
 # Demo
@@ -16,7 +16,9 @@ from WiderFaceDataset
 
 Predict using Caffe OpenPose and Keras
 
-`python predict.py` (implementing)
+`python predict.py`
+
+<img src="https://github.com/abars/3d-pose-baseline-keras/blob/master/images/running.png" width="75%" height="75%">
 
 # How to Train
 
@@ -38,7 +40,7 @@ from WiderFaceDataset
 
 Training using Keras
 
-`python train.py` (implementing)
+`python train.py`
 
 This is a pretrained output
 

@@ -37,6 +37,7 @@ import keras.callbacks
 DATASET_PATH='../3d-pose-baseline-master'
 MODEL_HDF5 = "3d-pose-baseline.hdf5"
 PLOT_FILE = "3d-pose-baseline.png"
+EPOCHS = 20
 
 # ----------------------------------------------
 # Import Dataset
@@ -65,74 +66,46 @@ output_size=48
 linear_size=1024
 dropout_rate=0.5
 
-SIMPLE_MODEL=False
+#pre-processing
+inputs = Input(shape=(input_size,))
 
-if(SIMPLE_MODEL):
-  #pre-processing
-  inputs = Input(shape=(input_size,))
+x1=Dense(linear_size)(inputs)
+y1=BatchNormalization()(x1)
+y1=Activation("relu")(y1)
+x2=Dropout(dropout_rate)(y1)
 
-  x1=Dense(linear_size)(inputs)
-  y1=BatchNormalization()(x1)
-  y1=Activation("relu")(y1)
-  x2=Dropout(dropout_rate)(y1)
+#stage1
+y2=Dense(linear_size)(x2)
+y2=BatchNormalization()(y2)
+y2=Activation("relu")(y2)
+y2=Dropout(dropout_rate)(y2)
 
-  y2=Dense(linear_size)(x2)
-  y2=BatchNormalization()(y2)
-  y2=Activation("relu")(y2)
-  y2=Dropout(dropout_rate)(y2)
+y2=Dense(linear_size)(y2)
+y2=BatchNormalization()(y2)
+y2=Activation("relu")(y2)
+y2=Dropout(dropout_rate)(y2)
 
-  #output
-  predictions=Dense(output_size)(y2)
+x3=Add()([x2,y2])
 
-  model = Model(input=inputs, output=predictions)
-else:
-  #pre-processing
-  inputs = Input(shape=(input_size,))
+#stage2
+y3=Dense(linear_size)(x3)
+y3=BatchNormalization()(y3)
+y3=Activation("relu")(y3)
+y3=Dropout(dropout_rate)(y3)
 
-  x1=Dense(linear_size)(inputs)
-  y1=BatchNormalization()(x1)
-  y1=Activation("relu")(y1)
-  x2=Dropout(dropout_rate)(y1)
+y3=Dense(linear_size)(y3)
+y3=BatchNormalization()(y3)
+y3=Activation("relu")(y3)
+y3=Dropout(dropout_rate)(y3)
 
-  #stage1
-  y2=Dense(linear_size)(x2)
-  y2=BatchNormalization()(y2)
-  y2=Activation("relu")(y2)
-  y2=Dropout(dropout_rate)(y2)
+x4=Add()([x3,y3])
 
-  y2=Dense(linear_size)(y2)
-  y2=BatchNormalization()(y2)
-  y2=Activation("relu")(y2)
-  y2=Dropout(dropout_rate)(y2)
+#output
+predictions=Dense(output_size)(x4)
 
-  x3=Add()([x2,y2])
-
-  #stage2
-  y3=Dense(linear_size)(x3)
-  y3=BatchNormalization()(y3)
-  y3=Activation("relu")(y3)
-  y3=Dropout(dropout_rate)(y3)
-
-  y3=Dense(linear_size)(y3)
-  y3=BatchNormalization()(y3)
-  y3=Activation("relu")(y3)
-  y3=Dropout(dropout_rate)(y3)
-
-  x4=Add()([x3,y3])
-
-  #output
-  predictions=Dense(output_size)(x4)
-
-  model = Model(input=inputs, output=predictions)
+model = Model(input=inputs, output=predictions)
 
 model.summary()
-
-# ----------------------------------------------
-# Input Data Preprocessing
-# ----------------------------------------------
-
-#data_mean = np.mean(complete_data, axis=0)
-#data_std  =  np.std(complete_data, axis=0)
 
 # ----------------------------------------------
 # Data
@@ -140,25 +113,13 @@ model.summary()
 
 preprocessing_function=None
 
-#x_train=np.zeros(input_size)
-#y_train=np.zeros(output_size)
-
-#x_test=np.zeros(input_size)
-#y_test=np.zeros(output_size)
-
-#x_train = np.reshape(x_train, (1, input_size))
-#y_train = np.reshape(y_train, (1, output_size))
-
-#x_test = np.reshape(x_test, (1, input_size))
-#y_test = np.reshape(y_test, (1, output_size))
-
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='mean_squared_error',
               optimizer=sgd,
               metrics=['accuracy'])
 
 fit = model.fit(x_train, y_train,
-          epochs=20,
+          epochs=EPOCHS,
           batch_size=128,
           validation_data=(x_test, y_test))
 

@@ -48,6 +48,14 @@ http://www.abars.biz/keras/3d-pose-baseline.hdf5
 
 http://www.abars.biz/keras/3d-pose-baseline-mean.h5
 
+## Convert to Caffemodel
+
+`python convert.py`
+
+http://www.abars.biz/keras/3d-pose-baseline.caffemodel
+
+http://www.abars.biz/keras/3d-pose-baseline.prototxt
+
 # About 3d-pose-baseline
 
 ## Architecture

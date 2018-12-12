@@ -26,7 +26,7 @@ Predict using Caffe OpenPose and Keras
 
 Dump training data from 3d-pose-baseline using export_dataset.py
 
-https://github.com/ArashHosseini/3d-pose-baseline
+https://github.com/una-dinosauria/3d-pose-baseline
 
 ## Check Exported Data
 
@@ -72,7 +72,7 @@ Mean value has 32 keypoint, So you should remove unused dimension. Mean value is
 
 ## Original work
 
-https://github.com/ArashHosseini/3d-pose-baseline
+https://github.com/una-dinosauria/3d-pose-baseline
 
 > @inproceedings{martinez_2017_3dbaseline,
 >   title={A simple yet effective baseline for 3d human pose estimation},

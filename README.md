@@ -42,6 +42,8 @@ Training using Keras
 
 This is a pretrained output
 
+<img src="https://github.com/abars/3d-pose-baseline-keras/blob/master/images/3d-pose-baseline.png" width="50%" height="50%">
+
 http://www.abars.biz/keras/3d-pose-baseline.hdf5
 
 http://www.abars.biz/keras/3d-pose-baseline-mean.h5
